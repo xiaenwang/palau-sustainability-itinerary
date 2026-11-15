@@ -1,1 +1,280 @@
-https://share.gemini.google/hzKyfV4yX82O
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>帛琉 5 日永續海洋探索之旅</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f0f9ff;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="text-slate-800 pb-24">
+
+  <header class="bg-gradient-to-r from-cyan-700 via-teal-600 to-emerald-600 text-white sticky top-0 z-40 shadow-md">
+    <div class="max-w-2xl mx-auto px-4 pt-4 pb-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="inline-block text-[11px] font-bold tracking-wider uppercase bg-white/20 px-2 py-0.5 rounded-full mb-1">Palau Eco-Travel</span>
+          <h1 class="text-xl font-black tracking-tight">帛琉 5 日永續海洋之旅</h1>
+        </div>
+        <button onclick="copyItinerary()" class="bg-white/20 hover:bg-white/30 active:scale-95 transition text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 backdrop-blur-sm border border-white/20">
+          <span>📋</span>
+          <span id="copyBtnText">複製行程</span>
+        </button>
+      </div>
+
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-cyan-100 mb-1">
+          <span>行程完成進度</span>
+          <span id="progressText" class="font-bold">0 / 22 項</span>
+        </div>
+        <div class="w-full bg-black/20 rounded-full h-2 overflow-hidden">
+          <div id="progressBar" class="bg-amber-300 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="bg-white/95 backdrop-blur-md border-b border-slate-200 text-slate-700">
+      <div class="max-w-2xl mx-auto flex overflow-x-auto no-scrollbar px-2 py-2 gap-1.5" id="dayTabs"></div>
+    </nav>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 pt-4 space-y-4" id="mainContent"></main>
+
+  <div class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 z-40">
+    <div class="max-w-2xl mx-auto flex items-center justify-between gap-3">
+      <button onclick="changeDay(-1)" id="prevBtn" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm bg-slate-100 text-slate-700 active:scale-95 transition disabled:opacity-40">
+        ← 上一頁
+      </button>
+      <button onclick="resetProgress()" class="py-2.5 px-3 rounded-xl text-xs font-medium text-slate-400 hover:text-rose-500">
+        重置勾選
+      </button>
+      <button onclick="changeDay(1)" id="nextBtn" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm bg-teal-600 text-white shadow-sm active:scale-95 transition disabled:opacity-40">
+        下一頁 →
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const itineraryData = [
+      {
+        day: "Day 1",
+        title: "抵達彩虹故鄉・簽署帛琉誓詞",
+        subtitle: "機場入境、環保宣誓與市區夕陽",
+        items: [
+          { id: "d1-1", time: "13:30", title: "抵達帛琉國際機場 (ROR) & 簽署帛琉誓詞", location: "Roman Tmetuchl International Airport", ecoTag: "🌍 護照蓋章簽署生態保育承諾", details: "入境時海關會在護照蓋上《帛琉誓詞》(Palau Pledge)，請親筆簽名承諾保護當地環境。務必確認行李中沒有攜帶含有「二苯甲酮 (Oxybenzone)」等危害珊瑚成分的防曬乳（違規將被沒收並罰款）。" },
+          { id: "d1-2", time: "15:00", title: "入住環保認證飯店 & 領取浮潛裝備", location: "Palau Pacific Resort", ecoTag: "♻️ 自備環保水壺減少瓶裝水", details: "辦理入住手續，向導遊確認明日出海的蛙鏡、呼吸管與救生衣尺寸。建議自備環保水壺在飯店飲水機裝水。" },
+          { id: "d1-3", time: "17:30", title: "KB 大橋 (Koror-Babeldaob Bridge) 賞日落", location: "Koror-Babeldaob Bridge", ecoTag: "📸 零垃圾無痕欣賞海景", details: "連接科羅爾島與巴貝爾圖阿普島的地標大橋，傍晚微風徐徐，是欣賞太平洋落日與當地居民釣魚休閒的最佳地點。" },
+          { id: "d1-4", time: "19:00", title: "在地永續海鮮晚餐（拒吃保育類）", location: "Elilai Seaside Dining", ecoTag: "🐟 支持永續漁獲、拒吃蘇眉魚與海龜", details: "享用新鮮現撈的深海魚料理與帛琉特色芋頭點心。遵守當地永續飲食規範，不點食保育類蘇眉魚（拿破崙魚）與蝙蝠湯。" }
+        ]
+      },
+      {
+        day: "Day 2",
+        title: "洛克群島奇蹟・水母湖與牛奶湖",
+        subtitle: "世界自然遺產巡禮與無毒護膚體驗",
+        items: [
+          { id: "d2-1", time: "08:30", title: "出海行前簡報 & 檢查海洋友善防曬", location: "Sam's Tours Palau", ecoTag: "🧴 僅使用物理性礦物防曬或水母衣", details: "前往碼頭集合搭船出海。下水前請勿擦拭任何化學防曬乳與化妝品，建議穿著長袖水母衣（Rash Guard）防曬最環保。" },
+          { id: "d2-2", time: "10:00", title: "牛奶湖 (Milky Way) 天然火山泥 SPA", location: "Milky Way Palau", ecoTag: "🌋 天然白色火山泥敷臉護膚", details: "船長會潛入海底撈起富含礦物質的乳白色火山泥，塗抹全身後跳入蒂芬妮藍的海水中洗淨，天然去角質。" },
+          { id: "d2-3", time: "12:00", title: "無人島現烤 BBQ 午餐（自備環保餐具）", location: "Ulong Island Palau", ecoTag: "🍱 零一次性塑膠餐具", details: "在無人島沙灘享用現烤鮮魚與熱帶水果。帛琉已全面禁用一次性塑膠袋與吸管，請使用船公司提供的重複清洗餐具。" },
+          { id: "d2-4", time: "14:00", title: "黃金水母湖 (Jellyfish Lake) 溫柔共游", location: "Jellyfish Lake Palau", ecoTag: "🪼 嚴禁觸摸、捏擠或將水母拿出水面", details: "翻越一小段珊瑚礁山坡抵達內陸鹹水湖。與成千上萬隻無毒黃金水母共游時，請放慢踢蛙鞋速度，避免氣泡與水流傷及脆弱的水母。" }
+        ]
+      },
+      {
+        day: "Day 3",
+        title: "海底花園探索・大斷層與鯊魚城",
+        subtitle: "世界七大潛點之首與珊瑚保育區",
+        items: [
+          { id: "d3-1", time: "09:00", title: "帛琉大斷層 (Big Drop Off) 浮潛", location: "Big Drop Off Palau", ecoTag: "🪸 保持中性浮力、嚴禁踩踏珊瑚", details: "從水深 3 呎垂直落差至 2,000 呎的壯麗海牆，可見滿滿軟硬珊瑚、海扇與成群熱帶魚。請全程保持水平漂浮，絕對不要站立在珊瑚礁上。" },
+          { id: "d3-2", time: "11:00", title: "德國水道 (German Channel) 尋找鬼蝠魟", location: "German Channel Palau", ecoTag: "🦈 保持距離安靜觀察大型海洋生物", details: "二戰時期人工開鑿的航道，是清潔魚聚集地，運氣好能看到優雅滑翔的鬼蝠魟（Manta Ray）。" },
+          { id: "d3-3", time: "13:30", title: "長沙灘 (Long Beach) 漫步海中步道", location: "Long Beach Palau", ecoTag: "🐚 不撿拾貝殼與白沙帶走", details: "退潮時才會浮現的綿延白沙灘，連接兩座翠綠小島。請只帶走照片，將貝殼與沙子留給寄居蟹。" },
+          { id: "d3-4", time: "15:00", title: "百年干貝城 (Giant Clam City)", location: "Giant Clam City Palau", ecoTag: "🦪 遠觀不觸碰百年巨型硨磲貝", details: "欣賞直徑超過 1 公尺、擁有螢光藍綠唇邊的百年硨磲貝，切勿伸手觸碰以免刺激牠們閉合。" }
+        ]
+      },
+      {
+        day: "Day 4",
+        title: "北島陸地文化・安德貌大瀑布與歷史",
+        subtitle: "熱帶雨林健行與帛琉傳統男人會館",
+        items: [
+          { id: "d4-1", time: "09:30", title: "安德貌大瀑布 (Ngardmau Waterfall) 雨林健行", location: "Ngardmau Waterfall", ecoTag: "🥾 沿著指定步道行走保護雨林植被", details: "深入巴貝爾圖阿普島原始熱帶雨林，走過舊日軍運礦鐵道與溪流，在帛琉最高瀑布下享受天然負離子水療。建議穿著防滑溯溪鞋。" },
+          { id: "d4-2", time: "12:30", title: "北島傳統風味午餐", location: "Babeldaob Island Palau", ecoTag: "🥥 品嚐在地有機農作與椰子蟹替代料理", details: "在北島綠意環繞的餐廳享用當地農家種植的木薯、芋頭與新鮮水果。" },
+          { id: "d4-3", time: "14:30", title: "小白宮總統府 & 傳統男人會館 (Bai)", location: "Palau National Capitol", ecoTag: "🏛️ 尊重當地母系社會與傳統建築禁忌", details: "參觀外觀宏偉的帛琉總統府，接著造訪彩繪著神話故事的傳統木造「男人會館」，認識帛琉獨特的母系社會文化。" }
+        ]
+      },
+      {
+        day: "Day 5",
+        title: "海洋保育教育・文化巡禮與賦歸",
+        subtitle: "認識珊瑚復育與採購在地永續伴手禮",
+        items: [
+          { id: "d5-1", time: "09:30", title: "帛琉國際珊瑚礁中心 (PICRC) 水族館", location: "Palau International Coral Reef Center", ecoTag: "🔬 了解全球暖化與珊瑚白化保育研究", details: "參觀帛琉最重要的海洋研究機構，近距離觀察鸚鵡螺與珊瑚復育缸，深入了解當地如何守護這片海洋。" },
+          { id: "d5-2", time: "11:30", title: "支持在地工藝伴手禮（拒買海龜殼製品）", location: "WCTC Shopping Center", ecoTag: "🛍️ 購買在地手工皂、椰子油與故事板木雕", details: "選購帛琉婦女手工製作的天然椰子油護膚品、諾麗果茶或傳統故事板（Storyboard）。嚴禁購買玳瑁（海龜殼）與黑珊瑚飾品（海關會重罰）。" },
+          { id: "d5-3", time: "14:00", title: "前往帛琉國際機場辦理登機返家", location: "Roman Tmetuchl International Airport", ecoTag: "✈️ 帶著美好回憶離開彩虹故鄉", details: "提前 2 小時抵達機場辦理報到與行李托運，整理這五天在帛琉拍下的海洋紀錄。" }
+        ]
+      },
+      {
+        day: "必備清單",
+        title: "行前永續準備與當地實用資訊",
+        subtitle: "出發前打勾確認，在帛琉不踩雷",
+        isChecklist: true,
+        items: [
+          { id: "chk-1", time: "法規必備", title: "確認防曬乳不含 Oxybenzone 等禁用成分", location: "Palau", ecoTag: "🚫 違反攜帶入關將被沒收並罰款 $1,000 美元", details: "建議直接購買標示「Reef Safe（海洋友善）」且僅含氧化鋅（Zinc Oxide）或二氧化鈦（Titanium Dioxide）的純物理性防曬，或直接穿長袖水母衣。" },
+          { id: "chk-2", time: "減塑裝備", title: "隨身環保水壺、防水袋與重複使用餐具", location: "Palau", ecoTag: "💧 飯店與船隻皆提供飲水機補充", details: "出海時帶上 10L–20L 防水袋保護手機與乾毛巾；自備水壺可大幅減少每日在海上的塑膠瓶消耗。" },
+          { id: "chk-3", time: "出海穿搭", title: "長袖水母衣、防滑溯溪鞋、個人近視面鏡", location: "Palau", ecoTag: "🥽 物理防曬最有效且不污染海洋", details: "水母衣不僅防曬還能防止水母或珊瑚輕微刮傷；走安德貌瀑布或上下船時，防滑膠鞋非常實用。" },
+          { id: "chk-4", time: "當地資訊", title: "貨幣美金 (USD) / 電壓 110V / 台灣快 1 小時", location: "Palau", ecoTag: "💵 準備小額美金現金支付導遊與船長小費", details: "帛琉使用美金，插座與台灣相同（雙平腳 110V）不需轉接頭；時區為 UTC+9，比台灣快 1 小時。出海小費建議每人每天準備約 $10–$15 美元。" }
+        ]
+      }
+    ];
+
+    let currentTab = 0;
+    let checkedItems = JSON.parse(localStorage.getItem('palau_checked_items') || '{}');
+
+    function saveProgress() {
+      localStorage.setItem('palau_checked_items', JSON.stringify(checkedItems));
+      updateProgressUI();
+    }
+
+    function toggleCheck(id) {
+      checkedItems[id] = !checkedItems[id];
+      saveProgress();
+      renderContent();
+    }
+
+    function resetProgress() {
+      if (confirm('確定要清除所有已勾選的行程進度嗎？')) {
+        checkedItems = {};
+        saveProgress();
+        renderContent();
+      }
+    }
+
+    function updateProgressUI() {
+      const total = itineraryData.reduce((acc, day) => acc + day.items.length, 0);
+      const completed = Object.values(checkedItems).filter(Boolean).length;
+      const pct = Math.round((completed / total) * 100);
+      document.getElementById('progressText').textContent = `${completed} / ${total} 項 (${pct}%)`;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+    }
+
+    function renderTabs() {
+      const tabsContainer = document.getElementById('dayTabs');
+      tabsContainer.innerHTML = itineraryData.map((d, idx) => {
+        const isActive = idx === currentTab;
+        const dayTotal = d.items.length;
+        const dayDone = d.items.filter(item => checkedItems[item.id]).length;
+        const isAllDone = dayDone === dayTotal && dayTotal > 0;
+        return `
+          <button onclick="selectTab(${idx})"
+            class="shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+              isActive ? 'bg-teal-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }">
+            <span>${d.day}</span>
+            ${isAllDone ? '<span class="text-[10px]">✅</span>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderContent() {
+      renderTabs();
+      const data = itineraryData[currentTab];
+      const main = document.getElementById('mainContent');
+
+      const cardsHtml = data.items.map(item => {
+        const isChecked = !!checkedItems[item.id];
+        const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.location)}`;
+        return `
+          <div class="bg-white rounded-2xl p-4 shadow-sm border transition-all ${
+            isChecked ? 'border-emerald-300 bg-emerald-50/30 opacity-80' : 'border-slate-200/80'
+          }">
+            <div class="flex items-start gap-3">
+              <button onclick="toggleCheck('${item.id}')" aria-label="標記完成"
+                class="mt-0.5 w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition ${
+                  isChecked ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 bg-white hover:border-teal-500'
+                }">
+                ${isChecked ? '✓' : ''}
+              </button>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="inline-block text-xs font-extrabold px-2 py-0.5 rounded-md ${
+                    data.isChecklist ? 'bg-amber-100 text-amber-800' : 'bg-cyan-100 text-cyan-800'
+                  }">${item.time}</span>
+                  ${!data.isChecklist ? `
+                    <a href="${mapUrl}" target="_blank" rel="noopener noreferrer"
+                      class="text-xs font-bold text-teal-700 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded-lg flex items-center gap-1 shrink-0 transition">
+                      <span>📍 地圖導航</span>
+                    </a>` : ''}
+                </div>
+                <h3 class="font-bold text-base leading-snug text-slate-900 ${isChecked ? 'line-through text-slate-500' : ''}">
+                  ${item.title}
+                </h3>
+                <div class="mt-2 inline-block bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium px-2.5 py-1 rounded-lg">
+                  ${item.ecoTag}
+                </div>
+                <details class="mt-2.5 group" open>
+                  <summary class="text-xs font-bold text-slate-400 cursor-pointer select-none list-none flex items-center gap-1">
+                    <span class="group-open:rotate-90 transition-transform inline-block">▶</span>
+                    <span>注意事項與細節</span>
+                  </summary>
+                  <p class="mt-1.5 text-sm text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    ${item.details}
+                  </p>
+                </details>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      main.innerHTML = `
+        <div class="bg-white rounded-2xl p-4 border border-teal-100 shadow-sm">
+          <div class="text-xs font-bold text-teal-600 uppercase tracking-wider">${data.day}</div>
+          <h2 class="text-lg font-black text-slate-900 mt-0.5">${data.title}</h2>
+          <p class="text-xs text-slate-500 mt-1">${data.subtitle}</p>
+        </div>
+        <div class="space-y-3">${cardsHtml}</div>
+      `;
+
+      document.getElementById('prevBtn').disabled = currentTab === 0;
+      document.getElementById('nextBtn').disabled = currentTab === itineraryData.length - 1;
+    }
+
+    function selectTab(idx) {
+      currentTab = idx;
+      renderContent();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function changeDay(delta) {
+      const next = currentTab + delta;
+      if (next >= 0 && next < itineraryData.length) selectTab(next);
+    }
+
+    function copyItinerary() {
+      let text = "🌴【帛琉 5 日永續海洋探索之旅】行程表\n\n";
+      itineraryData.forEach(day => {
+        text += `📌 ${day.day}：${day.title}\n`;
+        day.items.forEach(item => {
+          const mark = checkedItems[item.id] ? "✅" : "▫️";
+          text += `${mark} ${item.time} ${item.title}\n`;
+        });
+        text += "\n";
+      });
+      navigator.clipboard.writeText(text).then(() => {
+        const btnText = document.getElementById('copyBtnText');
+        btnText.textContent = "已複製！";
+        setTimeout(() => { btnText.textContent = "複製行程"; }, 2000);
+      });
+    }
+
+    updateProgressUI();
+    renderContent();
+  </script>
+</body>
+</html>
